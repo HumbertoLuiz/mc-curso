@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 
 
 @Entity
-public class Categoria implements Serializable{
+public class Categoria implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
