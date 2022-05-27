@@ -1,6 +1,7 @@
 package io.github.humbertoluiz.mc.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +26,7 @@ public class Categoria implements Serializable {
 	
 	public Categoria() {}
 
-	public Categoria(Long id, String nome) {
-		this.id = id;
+	public Categoria(String nome) {
 		this.nome = nome;
 	}
 	
@@ -44,6 +44,23 @@ public class Categoria implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nome);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Categoria other = (Categoria) obj;
+		return Objects.equals(nome, other.nome);
 	}
 	
 	

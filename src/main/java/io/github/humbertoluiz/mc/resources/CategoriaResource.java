@@ -22,9 +22,10 @@ public class CategoriaResource {
 	
 	@GetMapping("/listar/{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id) {
-
 		Categoria obj = service.buscar(id);		
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	
 
 }
