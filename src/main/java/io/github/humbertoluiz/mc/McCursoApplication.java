@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import io.github.humbertoluiz.mc.domain.Categoria;
 import io.github.humbertoluiz.mc.domain.Cidade;
+import io.github.humbertoluiz.mc.domain.Cliente;
+import io.github.humbertoluiz.mc.domain.Endereco;
 import io.github.humbertoluiz.mc.domain.Estado;
 import io.github.humbertoluiz.mc.domain.Produto;
+import io.github.humbertoluiz.mc.domain.enums.TipoCliente;
 import io.github.humbertoluiz.mc.repositories.CategoriaRepository;
 import io.github.humbertoluiz.mc.repositories.CidadeRepository;
+import io.github.humbertoluiz.mc.repositories.ClienteRepository;
+import io.github.humbertoluiz.mc.repositories.EnderecoRepository;
 import io.github.humbertoluiz.mc.repositories.EstadoRepository;
 import io.github.humbertoluiz.mc.repositories.ProdutoRepository;
 
@@ -25,15 +30,16 @@ public class McCursoApplication implements CommandLineRunner {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	
 	@Autowired
 	private EstadoRepository estadoRepository;
-	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -70,5 +76,37 @@ public class McCursoApplication implements CommandLineRunner {
 		
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Cliente cli1 = Cliente.builder()
+				.nome("Maria Silva")
+				.email("maria@gmail.com")
+				.cpfOuCnpj("36378912377")
+				.tipo(TipoCliente.PESSOAFISICA)
+				.build();
+		
+		cli1.getTelefones().addAll(Arrays.asList("0000000","1111111"));
+		
+		Endereco e1 = Endereco.builder()
+				.logradouro("Rua Flores")
+				.numero("300")
+				.complemento("apto 303")
+				.bairro("Jardim")
+				.cep("85469-490")
+				.cliente(cli1)
+				.cidade(c1).build();
+		
+		Endereco e2 = Endereco.builder()
+				.logradouro("Av. Matos")
+				.numero("105")
+				.complemento("sala 800")
+				.bairro("Centro")
+				.cep("87869-990")
+				.cliente(cli1)
+				.cidade(c2).build();
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
+		clienteRepository.saveAll((Iterable<Cliente>) Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1,e2));
 	}
 }
