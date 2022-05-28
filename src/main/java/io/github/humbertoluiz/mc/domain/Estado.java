@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Builder;
@@ -20,8 +20,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Categoria implements Serializable {
-
+public class Estado implements Serializable {
+		
 	private static final long serialVersionUID = 1L;
 
 	@EqualsAndHashCode.Include
@@ -33,10 +33,12 @@ public class Categoria implements Serializable {
 	@Column(nullable = false)
 	private String nome;
 	
-	@Builder.Default
-	@ManyToMany(mappedBy = "categorias")
-	private Set<Produto> produtos = new HashSet<>();
+	@OneToMany(mappedBy="estado")
+	private Set<Cidade> cidades = new HashSet<>();
 
-	
+	@Builder
+	public Estado(String nome) {
+		this.nome = nome;
+	}
 	
 }

@@ -13,12 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@Builder
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -38,20 +38,12 @@ public class Produto implements Serializable {
 	@Column(nullable = false)
 	private Double preco;
 	
-	@JsonBackReference
+	@Builder.Default
+	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "PRODUTO_CATEGORIA",
+	@JoinTable(name = "produto_categoria",
 		joinColumns = @JoinColumn(name = "produto_id"),
-		inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-	
+		inverseJoinColumns = @JoinColumn(name = "categoria_id"))	
 	private Set<Categoria> categorias = new HashSet<>();
-
-	public Produto() {}
-	
-	public Produto(String nome, Double preco) {
-		this.nome = nome;
-		this.preco = preco;
-	}
-	
 
 }
