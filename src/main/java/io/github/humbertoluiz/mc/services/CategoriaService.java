@@ -1,9 +1,10 @@
 package io.github.humbertoluiz.mc.services;
 
+import java.util.Optional;
+
 import io.github.humbertoluiz.mc.domain.Categoria;
 
+public interface CategoriaService {	
 
-public interface CategoriaService {
-
-	Categoria buscar(Long id);
+	Optional<Categoria> buscar(Long id);
 }

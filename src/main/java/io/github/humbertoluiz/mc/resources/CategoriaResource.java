@@ -1,7 +1,6 @@
 package io.github.humbertoluiz.mc.resources;
 
-
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,7 @@ public class CategoriaResource {
 	
 	@GetMapping("/listar/{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id) {
-		Categoria obj = service.buscar(id);		
+		Optional<Categoria> obj = service.buscar(id);		
 		return ResponseEntity.ok().body(obj);
 	}
 	
