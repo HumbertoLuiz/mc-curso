@@ -18,8 +18,10 @@ import io.github.humbertoluiz.mc.domain.enums.TipoCliente;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Builder
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity

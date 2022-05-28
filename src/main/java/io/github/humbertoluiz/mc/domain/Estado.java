@@ -12,11 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Builder
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -33,6 +37,7 @@ public class Estado implements Serializable {
 	@Column(nullable = false)
 	private String nome;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="estado")
 	private Set<Cidade> cidades = new HashSet<>();
 

@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.humbertoluiz.mc.domain.Categoria;
-import io.github.humbertoluiz.mc.services.CategoriaService;
+import io.github.humbertoluiz.mc.domain.Cliente;
+import io.github.humbertoluiz.mc.services.ClienteService;
 
 @RestController
-@RequestMapping(value="/categorias")
-public class CategoriaResource {
+@RequestMapping(value="/clientes")
+public class ClienteResource {
 	
 	@Autowired
-	private CategoriaService service;
+	private ClienteService service;
 	
 	@GetMapping("/buscar/{id}")
 	public ResponseEntity<?> buscar(@PathVariable Long id) {
-		Optional<Categoria> obj = service.buscar(id);		
+		Optional<Cliente> obj = service.buscar(id);		
 		return ResponseEntity.ok().body(obj);
 	}
 	
