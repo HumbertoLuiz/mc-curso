@@ -1,14 +1,17 @@
 package io.github.humbertoluiz.mc.domain;
 
 import java.io.Serializable;
-import javax.persistence.Column;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.OneToOne;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class Cidade implements Serializable {
+public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,18 +31,26 @@ public class Cidade implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank
-	@Column(nullable = false)
-	private String nome;
+	private Date instante;
+	
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
+	private Pagamento pagamento;
 	
 	@ManyToOne
-	@JoinColumn(name = "estado_id")
-	private Estado estado;
+	@JoinColumn(name="cliente_id")
+	private Cliente cliente;
 	
+	@ManyToOne
+	@JoinColumn(name="endereco_de_entrega_id")
+	private Endereco enderecoDeEntrega;
+
+
 	@Builder
-	public Cidade(String nome, Estado estado) {
-		this.nome = nome;
-		this.estado = estado;
+	public Pedido(Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
+		this.instante = instante;
+		this.cliente = cliente;
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
-		
+	
+	
 }

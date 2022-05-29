@@ -1,5 +1,6 @@
 package io.github.humbertoluiz.mc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import io.github.humbertoluiz.mc.domain.Cidade;
 import io.github.humbertoluiz.mc.domain.Cliente;
 import io.github.humbertoluiz.mc.domain.Endereco;
 import io.github.humbertoluiz.mc.domain.Estado;
+import io.github.humbertoluiz.mc.domain.Pagamento;
+import io.github.humbertoluiz.mc.domain.PagamentoComBoleto;
+import io.github.humbertoluiz.mc.domain.PagamentoComCartao;
+import io.github.humbertoluiz.mc.domain.Pedido;
 import io.github.humbertoluiz.mc.domain.Produto;
+import io.github.humbertoluiz.mc.domain.enums.EstadoPagamento;
 import io.github.humbertoluiz.mc.domain.enums.TipoCliente;
 import io.github.humbertoluiz.mc.repositories.CategoriaRepository;
 import io.github.humbertoluiz.mc.repositories.CidadeRepository;
 import io.github.humbertoluiz.mc.repositories.ClienteRepository;
 import io.github.humbertoluiz.mc.repositories.EnderecoRepository;
 import io.github.humbertoluiz.mc.repositories.EstadoRepository;
+import io.github.humbertoluiz.mc.repositories.PagamentoRepository;
+import io.github.humbertoluiz.mc.repositories.PedidoRepository;
 import io.github.humbertoluiz.mc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -40,6 +48,11 @@ public class McCursoApplication implements CommandLineRunner {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -108,5 +121,39 @@ public class McCursoApplication implements CommandLineRunner {
 		
 		clienteRepository.saveAll((Iterable<Cliente>) Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:m");
+		
+		Pedido ped1 = Pedido.builder()
+				.instante(sdf.parse("30/09/2017 10:32"))
+				.cliente(cli1)
+				.enderecoDeEntrega(e1)
+				.build();
+		
+		Pedido ped2 = Pedido.builder()
+				.instante(sdf.parse("10/10/2017 19:35"))
+				.cliente(cli1)
+				.enderecoDeEntrega(e2)
+				.build();
+		
+		Pagamento pagto1 = PagamentoComCartao.builder()
+				.estado(EstadoPagamento.QUITADO)
+				.pedido(ped1)
+				.numeroDeParcelas(6)
+				.build();		
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = PagamentoComBoleto.builder()
+				.estado(EstadoPagamento.PENDENTE)
+				.pedido(ped2)
+				.dataVencimento(sdf.parse("20/10/2017 00:00"))
+				.dataPagamento(null)
+				.build();		
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 }
