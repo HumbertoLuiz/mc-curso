@@ -1,7 +1,9 @@
 package io.github.humbertoluiz.mc.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,6 +45,9 @@ public class Produto implements Serializable {
 	@Column(nullable = false)
 	private Double preco;
 	
+	@OneToMany(mappedBy="id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "produto_categoria",
@@ -55,6 +61,12 @@ public class Produto implements Serializable {
 		this.preco = preco;
 	}
 
-
+	public List<Pedido> getPedidos() {
+		List<Pedido> lista = new ArrayList<>();
+		for(ItemPedido x : itens) {
+			lista.add(x.getPedido());
+		}
+		return lista;
+	}
 	
 }

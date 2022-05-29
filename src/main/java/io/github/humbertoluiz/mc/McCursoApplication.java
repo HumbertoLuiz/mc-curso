@@ -13,6 +13,7 @@ import io.github.humbertoluiz.mc.domain.Cidade;
 import io.github.humbertoluiz.mc.domain.Cliente;
 import io.github.humbertoluiz.mc.domain.Endereco;
 import io.github.humbertoluiz.mc.domain.Estado;
+import io.github.humbertoluiz.mc.domain.ItemPedido;
 import io.github.humbertoluiz.mc.domain.Pagamento;
 import io.github.humbertoluiz.mc.domain.PagamentoComBoleto;
 import io.github.humbertoluiz.mc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import io.github.humbertoluiz.mc.repositories.CidadeRepository;
 import io.github.humbertoluiz.mc.repositories.ClienteRepository;
 import io.github.humbertoluiz.mc.repositories.EnderecoRepository;
 import io.github.humbertoluiz.mc.repositories.EstadoRepository;
+import io.github.humbertoluiz.mc.repositories.ItemPedidoRepository;
 import io.github.humbertoluiz.mc.repositories.PagamentoRepository;
 import io.github.humbertoluiz.mc.repositories.PedidoRepository;
 import io.github.humbertoluiz.mc.repositories.ProdutoRepository;
@@ -52,7 +54,8 @@ public class McCursoApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;	
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -155,5 +158,39 @@ public class McCursoApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+	
+		ItemPedido ip1 = ItemPedido.builder()
+				.pedido(ped1)
+				.produto(p1)
+				.desconto(0.00)
+				.quantidade(1)
+				.preco(2000.00)
+				.build();
+			
+		ItemPedido ip2 = ItemPedido.builder()
+				.pedido(ped1)
+				.produto(p3)
+				.desconto(0.00)
+				.quantidade(2)
+				.preco(80.00)
+				.build();
+		
+		ItemPedido ip3 = ItemPedido.builder()
+				.pedido(ped2)
+				.produto(p2)
+				.desconto(100.00)
+				.quantidade(1)
+				.preco(800.00)
+				.build();
+	
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip1));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
 	}
 }
