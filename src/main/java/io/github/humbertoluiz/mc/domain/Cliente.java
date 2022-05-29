@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.github.humbertoluiz.mc.domain.enums.TipoCliente;
 import lombok.Builder;
 import lombok.Data;
@@ -56,6 +58,7 @@ public class Cliente implements Serializable {
 	@CollectionTable(name="telefone")
 	private Set<String> telefones = new HashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy="cliente")
 	private Set<Pedido> pedidos = new HashSet<>();
 	
